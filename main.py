@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import random_split
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from rich.progress import track
 
 from NoodleNet import NoodleNet
@@ -45,6 +46,7 @@ model = NoodleNet()
 ### training loop
 loss_func = nn.CrossEntropyLoss()
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=10)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
@@ -114,6 +116,9 @@ for epoch in range(epochs):
         torch.save(model.state_dict(), save_path)
         best_acc = test_acc
         print(f"✅ Model improved and saved to {save_path}")
+
+    # 更新 scheduler
+    scheduler.step(test_loss)
 
 
 # 繪製 Loss 曲線
