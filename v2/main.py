@@ -35,8 +35,8 @@ train_dataset = datasets.ImageFolder(root='dataset2025/train', transform=train_t
 train_size = int(0.9 * len(train_dataset))
 test_size = len(train_dataset) - train_size
 train_data, val_data = random_split(train_dataset, [train_size, test_size])
-train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
-test_loader = DataLoader(val_data, batch_size=32, shuffle=False)
+train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+test_loader = DataLoader(val_data, batch_size=64, shuffle=False)
 
 ### model structure
 # 因為資料量不大，就不要用太複雜的模型以免 overfitting
@@ -45,8 +45,8 @@ model = NoodleNet()
 
 ### training loop
 loss_func = nn.CrossEntropyLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
-scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=10)
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-3)
+scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=6)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
@@ -121,29 +121,29 @@ for epoch in range(epochs):
     scheduler.step(test_loss)
 
 
-# 繪製 Loss 曲線
-plt.subplot(1, 2, 1) # 1 row, 2 cols, 1st plot
-plt.plot(history['train_loss'], label='Train Loss')
-plt.plot(history['test_loss'], label='Test Loss')
-plt.title('Loss Curve')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend()
-plt.grid(True)
+    # 繪製 Loss 曲線
+    plt.clf()
+    plt.subplot(1, 2, 1) # 1 row, 2 cols, 1st plot
+    plt.plot(history['train_loss'], label='Train Loss')
+    plt.plot(history['test_loss'], label='Test Loss')
+    plt.title('Loss Curve')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.grid(True)
 
-# 繪製 Accuracy 曲線
-plt.subplot(1, 2, 2) # 1 row, 2 cols, 2nd plot
-plt.plot(history['train_acc'], label='Train Acc')
-plt.plot(history['test_acc'], label='Test Acc')
-plt.title('Accuracy Curve')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.legend()
-plt.grid(True)
+    # 繪製 Accuracy 曲線
+    plt.subplot(1, 2, 2) # 1 row, 2 cols, 2nd plot
+    plt.plot(history['train_acc'], label='Train Acc')
+    plt.plot(history['test_acc'], label='Test Acc')
+    plt.title('Accuracy Curve')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.grid(True)
 
-plt.tight_layout() # 調整子圖佈局
-plt.savefig('training_curves.png') # 儲存圖表
-plt.show() # 顯示圖表
+    plt.tight_layout() # 調整子圖佈局
+    plt.savefig('training_curves.png') # 儲存圖表
 
 print(f"Best test accuracy achieved: {best_acc:.4f}")
 print("Training curves saved to training_curves.png")

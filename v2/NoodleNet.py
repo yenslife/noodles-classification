@@ -35,7 +35,6 @@ class NoodleNet(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(64, 3),
-            nn.Dropout(0.2),
         )
 
     def forward(self, x):
