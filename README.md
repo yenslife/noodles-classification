@@ -20,5 +20,5 @@
 若有實作新版本，做好之後可以用以下命令更新
 
 ```bash
-cp main.py inference.py inference_single_image.py NoodleNet.py submission.csv training_curves.png
+cp main.py inference.py inference_single_image.py NoodleNet.py submission.csv training_curves.png best_noodle_model.pth
 ```
