@@ -14,3 +14,11 @@
 - 不能使用 dataset2025/ 以外的資料來訓練（當然包含 test set）
 - Final Submission Deadline: 2025/11/4 23:00(Taiwan), 24:00(Japan)
 
+
+## 新架構更新
+
+若有實作新版本，做好之後可以用以下命令更新
+
+```bash
+cp main.py inference.py inference_single_image.py NoodleNet.py submission.csv training_curves.png
+```
