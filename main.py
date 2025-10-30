@@ -50,7 +50,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
 
-epochs = 200
+epochs = 300
 best_acc = 0.0
 save_path = "best_noodle_model.pth"
 history = {
